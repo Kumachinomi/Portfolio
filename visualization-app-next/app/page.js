@@ -7,8 +7,12 @@ import { Link as Scroll} from 'react-scroll'
 export default function Home() {
   const [content,setContent] = useState('');
   const [result,setResult] = useState('');
+  const [isLoading,setIsLoading] = useState(false);
+    
+  
 
   const review = async () => {
+    setIsLoading(true)
     const messages = [
       {
         role: 'user',
@@ -17,6 +21,7 @@ export default function Home() {
     ];
     const result = await claude.completion(messages);
     setResult(result);
+    setIsLoading(false);
   }
   return (
     <div className="min-h-screen bg-slate-300 flex flex-col items-center justify-center">
@@ -43,13 +48,15 @@ export default function Home() {
             onChange={(e) =>{
               setContent(e.target.value)
             }}
+            disabled={isLoading}
             className="h-full w-full bg-transparent text-white resize-none outline-none" />
-              
+            
           </div>
           <button 
            onClick={review}
+           disabled={isLoading || !content.trim}
            className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed">
-            状態遷移図にする
+            {isLoading ? '生成中...' : '状態遷移図にする'}
           </button>
         </div>
           <nav>
