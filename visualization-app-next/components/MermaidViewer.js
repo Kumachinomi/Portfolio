@@ -14,6 +14,7 @@ const MermaidViewer = ({ content }) => {
   }, []);
 
   useEffect(() => {
+    const container = document.getElementById("mermaidContainer");
     if (content) {
       document.getElementById('mermaid-diagram').innerHTML = '';
       
@@ -21,7 +22,7 @@ const MermaidViewer = ({ content }) => {
         const mermaidCode = content.match(/```mermaid\s*([\s\S]*?)\s*```/)?.[1] || '';
         
         if (mermaidCode) {
-          mermaid.render('mermaid-svg', mermaidCode).then(({ svg }) => {
+          mermaid.render('mermaid-svg', mermaidCode, undefined, container).then(({ svg }) => {
             document.getElementById('mermaid-diagram').innerHTML = svg;
           });
         }
@@ -33,7 +34,9 @@ const MermaidViewer = ({ content }) => {
   }, [content]);
 
   return (
-    <div id="mermaid-diagram" className="w-full h-full overflow-auto p-4" />
+    <div id="mermaidContainer">
+      <div id="mermaid-diagram" className="w-full h-full overflow-auto p-4" />
+    </div>
   );
 };
 

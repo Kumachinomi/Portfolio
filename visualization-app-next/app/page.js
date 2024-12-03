@@ -64,7 +64,6 @@ export default function Home() {
               <MermaidViewer content={result} />
             </div>
           </nav>
-
       </section>
 
       <section id="concept" className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden"  style={{ height: '20vh' }} >
