@@ -9,7 +9,10 @@ const MermaidViewer = ({ content }) => {
       securityLevel: 'loose',
       themeVariables: {
         fontFamily: 'arial',
-      }
+      },
+
+      htmlLabels: true,
+      fit: true,
     });
   }, []);
 
@@ -38,7 +41,7 @@ const MermaidViewer = ({ content }) => {
   }, [content]);
 
   return (
-    <div id="mermaid-diagram" className="w-[800px] min-h-[600px] overflow-auto" />
+    <div id="mermaid-diagram" className="w-full h-full overflow-auto" />
   );
 };
 

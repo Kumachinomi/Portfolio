@@ -69,8 +69,6 @@ export default function Home() {
           </Scroll>
         </span>
 
-        
-        
         {result && (
           <div className="p-4">
             <input
@@ -84,13 +82,13 @@ export default function Home() {
             />
             <button
               onClick={handleSave}
-              disabled={isLoading || !content.trim}
+              disabled={isLoading || !content.trim()}
               className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSaving ? "保存中..." : "保存する"}
             </button>
           </div>
-          )}
+        )}
       </header>
       <section
         className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden"
@@ -99,28 +97,27 @@ export default function Home() {
         <div className="flex flex-col w-1/3 h-full bg-gray-900 overflow-y-auto">
           <div className="flex-1 p-4 text-white">
             <textarea
+              value={content}
               onChange={(e) => {
                 setContent(e.target.value);
               }}
-              disabled={isLoading}
               className="h-full w-full bg-transparent text-white resize-none outline-none"
             />
           </div>
           <button
             onClick={review}
-            disabled={isLoading || !content.trim}
+            disabled={isLoading || !content.trim()}
             className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "生成中..." : "状態遷移図にする"}
           </button>
         </div>
-        
 
-        <nav>
-          <div className="flex flex-col w-2/3 h-full items-center justify-center">
+        <div className="w-2/3 h-full overflow-hidden">
+          <div className="flex flex-col h-full items-center justify-center max-w-full">
             <MermaidViewer content={result} />
           </div>
-        </nav>
+        </div>
       </section>
 
       <section
