@@ -16,6 +16,7 @@ const handler = async(req, res) => {
         if(req.method === 'GET'){
             const response = await axios.get(DJANGO_API_URL);
             return res.status(200).json(response.data);
+            
         }
         } catch (error) {
             return res.status(500).json({ error: 'Server error' });

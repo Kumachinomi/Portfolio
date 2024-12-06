@@ -11,6 +11,7 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [savedDiagrams, setSavedDiagrams] = useState([]);
 
   const generate = async () => {
     setIsLoading(true);
@@ -30,7 +31,6 @@ export default function Home() {
     const updatedContent = `${content}\n絵文字を適切に配置`;
     setContent(updatedContent);
 
-    
     const messages = [
       {
         role: "user",
@@ -58,6 +58,19 @@ export default function Home() {
       alert("保存に失敗しました");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleGet = async () => {
+    try {
+      const diagrams = await mermaidClient.getAllDiagrams();
+      setSavedDiagrams(diagrams);
+      console.log(diagrams);
+      alert("図を取得しました");
+    } catch (error) {
+      console.error("図の取得に失敗:", error);
+      alert("図の取得に失敗しました");
+    } finally {
     }
   };
 
@@ -140,17 +153,38 @@ export default function Home() {
 
         <div className="w-2/3 h-full overflow-hidden">
           <div className="flex flex-col h-full items-center justify-center max-w-full">
-            <MermaidViewer content={result} />
+            <MermaidViewer content={result} diagramId="main-diagram" />
           </div>
         </div>
       </section>
+      <button
+        onClick={handleGet}
+        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isSaving ? "取得中..." : "図を取得する"}
+      </button>
 
       <section
         id="concept"
         className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden"
-        style={{ height: "20vh" }}
+        style={{ height: "200vh" }}
       >
-        <div className="space-y-4"></div>
+        <div className="w-full p-6 space-y-4">
+          <h2 className="text-2xl font-bold text-gray-900">保存された図一覧</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {savedDiagrams.map((diagram, index) => (
+              <div key={index} className="border rounded-lg p-4 shadow-sm">
+                <h3 className="text-lg font-semibold mb-2">{diagram.title}</h3>
+                <div className="h-64 overflow-auto">
+                  <MermaidViewer
+                    content={diagram.diagram_data}
+                    diagramId={`saved-${diagram.id}`}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );
