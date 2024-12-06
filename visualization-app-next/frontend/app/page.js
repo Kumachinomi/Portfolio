@@ -12,12 +12,29 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const review = async () => {
+  const generate = async () => {
     setIsLoading(true);
     const messages = [
       {
         role: "user",
         content: `:今からの入力を状態遷移図で最大限詳細に表現してほしい\n${content}`,
+      },
+    ];
+    const result = await claude.completion(messages);
+    setResult(result);
+    setIsLoading(false);
+  };
+
+  const generateEmoji = async () => {
+    setIsLoading(true);
+    const updatedContent = `${content}\n絵文字を適切に配置`;
+    setContent(updatedContent);
+
+    
+    const messages = [
+      {
+        role: "user",
+        content: `:今からの入力を状態遷移図で最大限詳細に表現してほしい\n${updatedContent}`,
       },
     ];
     const result = await claude.completion(messages);
@@ -87,6 +104,14 @@ export default function Home() {
             >
               {isSaving ? "保存中..." : "保存する"}
             </button>
+
+            <button
+              onClick={generateEmoji}
+              disabled={isLoading || !content.trim()}
+              className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSaving ? "生成中..." : "絵文字をつける"}
+            </button>
           </div>
         )}
       </header>
@@ -105,7 +130,7 @@ export default function Home() {
             />
           </div>
           <button
-            onClick={review}
+            onClick={generate}
             disabled={isLoading || !content.trim()}
             className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
