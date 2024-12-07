@@ -26,6 +26,21 @@ class TestMermaidDiagramViewSet:
         assert response.data[0]['title'] == mermaid_diagram.title
         assert response.data[0]['diagram_data'] == mermaid_diagram.diagram_data
 
+    def test_create_diagram(self, api_client):
+        url = reverse('mermaiddiagram-list')
+        request_data = {
+            'title': 'New Diagram',
+            "diagram_data": 'graph LR;\nA-->B;'
+        }
+        response = api_client.post(url, request_data, format='json')
+
+        assert response.status_code == 201
+        assert MermaidDiagram.objects.count() == 1
+        assert response.data['title'] == request_data['title']
+        assert response.data['diagram_data'] == request_data['diagram_data']
+
+
+
 
 
 
