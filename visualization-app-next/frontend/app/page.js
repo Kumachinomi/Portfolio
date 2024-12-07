@@ -4,6 +4,8 @@ import claude from "../lib/claude";
 import mermaidClient from "../lib/MermaidDiagramAPI";
 import MermaidViewer from "@/components/MermaidViewer";
 import { Link as Scroll } from "react-scroll";
+import DiagramModal from "@/components/DiagramModal";
+
 
 export default function Home() {
   const [content, setContent] = useState("");
@@ -12,6 +14,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [savedDiagrams, setSavedDiagrams] = useState([]);
+  const [selectedDiagram, setSelectedDiagram] = useState(null);
 
   const generate = async () => {
     setIsLoading(true);
@@ -175,7 +178,10 @@ export default function Home() {
             {savedDiagrams.map((diagram, index) => (
               <div key={index} className="border rounded-lg p-4 shadow-sm">
                 <h3 className="text-lg font-semibold mb-2">{diagram.title}</h3>
-                <div className="h-64 overflow-auto">
+                <div
+                  className="h-64 overflow-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => setSelectedDiagram(diagram)}
+                >
                   <MermaidViewer
                     content={diagram.diagram_data}
                     diagramId={`saved-${diagram.id}`}
@@ -186,6 +192,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {selectedDiagram && (
+        <DiagramModal
+          diagram={selectedDiagram}
+          onClose={() => setSelectedDiagram(null)}
+          />
+      )}
     </div>
   );
 }

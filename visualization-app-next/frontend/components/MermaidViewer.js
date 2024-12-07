@@ -1,46 +1,59 @@
-import React, { useEffect } from 'react';
-import mermaid from 'mermaid';
+import React, { useEffect, useRef } from "react";
+import mermaid from "mermaid";
 
 const MermaidViewer = ({ content, diagramId }) => {
+  const containerRef = useRef(null);
+
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: true,
-      theme: 'default',
-      securityLevel: 'loose',
+      theme: "default",
+      securityLevel: "loose",
       themeVariables: {
-        fontFamily: 'arial',
+        fontFamily: "arial",
       },
       htmlLabels: true,
       fit: true,
     });
   }, []);
 
-  useEffect(() => {
-    const container = document.getElementById(`mermaid-diagram-${diagramId}`);
-    if (content && container) {
-      container.innerHTML = '';
-      
-      try {
-        const mermaidCode = content.match(/```mermaid\s*([\s\S]*?)\s*```/)?.[1] || '';
-        
-        if (mermaidCode) {
-          mermaid.render(`mermaid-svg-${diagramId}`, mermaidCode, undefined, container).then(({ svg }) => {
-            const modifiedSvg = svg.replace(
-              '<svg ',
-              '<svg width="100%" height="100%" style="margin: auto; display: block;" '
-            );
-            container.innerHTML = modifiedSvg;
-          });
-        }
-      } catch (error) {
-        container.innerHTML = '<div class="text-red-500">図の描画に失敗しました。もう一度別の文をお試しください。</div>';
+  const renderDiagram = async () => {
+    if (!content || !containerRef.current) return;
+
+    try {
+      containerRef.current.innerHTML = "";
+      const mermaidCode =
+        content.match(/```mermaid\s*([\s\S]*?)\s*```/)?.[1] || "";
+
+      if (mermaidCode) {
+        // レンダリング前に少し待機
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        const { svg } = await mermaid.render(
+          `mermaid-svg-${diagramId}`,
+          mermaidCode,
+          undefined,
+          containerRef.current
+        );
+
+        const modifiedSvg = svg.replace(
+          "<svg ",
+          '<svg width="100%" height="100%" style="margin: auto; display: block;" '
+        );
+        containerRef.current.innerHTML = modifiedSvg;
       }
+    } catch (error) {
+      console.error("Mermaid rendering error:", error);
+      containerRef.current.innerHTML =
+        '<div class="text-red-500">図の描画に失敗しました。もう一度別の文をお試しください。</div>';
     }
+  };
+
+  useEffect(() => {
+    renderDiagram();
   }, [content, diagramId]);
 
-  return (
-    <div id={`mermaid-diagram-${diagramId}`} className="w-full h-full overflow-auto" />
-  );
+  return <div ref={containerRef} className="w-full h-full overflow-auto" />;
 };
 
 export default MermaidViewer;
