@@ -90,7 +90,7 @@ DATABASES = {
     }
 }
 
-if os.getenv('RAILWAY_ENVIRONMENT_NAME'):
+if os.getenv('PGDATABASE') and os.getenv('PGUSER') and os.getenv('PGPASSWORD') and os.getenv('PGHOST') and os.getenv('PGPORT'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
