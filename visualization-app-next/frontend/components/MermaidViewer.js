@@ -14,6 +14,11 @@ const MermaidViewer = ({ content, diagramId }) => {
       },
       htmlLabels: true,
       fit: true,
+      // cytoscapeの依存関係を無効化
+      mindmap: {
+        useMaxWidth: true,
+        enableCytoscape: false
+      }
     });
   }, []);
 
