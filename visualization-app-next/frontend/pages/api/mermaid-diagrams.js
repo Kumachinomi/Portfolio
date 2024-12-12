@@ -5,7 +5,9 @@ const handler = async(req, res) => {
         return res.status(405).end();
     }
 
-    const DJANGO_API_URL = 'http://localhost:8000/api/mermaid-diagrams/';
+    const DJANGO_API_URL = process.env.NODE_ENV === 'development' 
+  ? 'http://localhost:8000/api/mermaid-diagrams/'
+  : `${process.env.NEXT_PUBLIC_API_URL}/api/mermaid-diagrams/`;
 
     try{
         if (req.method === 'POST'){
