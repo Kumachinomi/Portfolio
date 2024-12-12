@@ -167,4 +167,3 @@ CSRF_TRUSTED_ORIGINS = [
     "https://portfolio-production-ccca.up.railway.app"
 ]
 
-j
