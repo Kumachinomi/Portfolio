@@ -147,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:3000",
-    "https://portfolio-production-5572.up.railway.app",
+    "https://portfolio-production-ccca.up.railway.app",
 
 ]
 
@@ -164,6 +164,7 @@ CORS_ALLOW_METHODS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://portfolio-production-5572.up.railway.app"
+    "https://portfolio-production-ccca.up.railway.app"
 ]
 
+j
