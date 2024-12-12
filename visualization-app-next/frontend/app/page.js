@@ -3,7 +3,6 @@ import { useState } from "react";
 import claude from "../lib/claude";
 import mermaidClient from "../lib/MermaidDiagramAPI";
 import MermaidViewer from "@/components/MermaidViewer";
-import { Link as Scroll } from "react-scroll";
 import DiagramModal from "@/components/DiagramModal";
 
 export default function Home() {
@@ -89,17 +88,17 @@ export default function Home() {
             <span className="absolute bottom-8 left-0 w-full h-2 bg-indigo-200 transform -skew-x-6"></span>
           </span>
         </h1>
-        <span className="relative text-blue-900">
-          <Scroll
-            to="concept"
-            smooth={true}
-            duration={600}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2
+        <button
+          onClick={() => {
+            document
+              .getElementById("concept")
+              .scrollIntoView({ behavior: "smooth" });
+          }}
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2
            dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            下にスクロール
-          </Scroll>
-        </span>
+        >
+          下にスクロール
+        </button>
 
         {result && (
           <div className="p-4">
@@ -161,7 +160,7 @@ export default function Home() {
       </section>
       <button
         onClick={handleGet}
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-block bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSaving ? "取得中..." : "図を取得する"}
       </button>
