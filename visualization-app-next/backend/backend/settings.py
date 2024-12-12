@@ -144,12 +144,26 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#開発環境用
+
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:3000",
+    "https://portfolio-production-5572.up.railway.app",
+
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PATCH',
+    'DELETE',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://portfolio-production-5572.up.railway.app"
+]
 
