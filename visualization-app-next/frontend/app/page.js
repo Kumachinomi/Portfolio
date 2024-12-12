@@ -6,7 +6,6 @@ import MermaidViewer from "@/components/MermaidViewer";
 import { Link as Scroll } from "react-scroll";
 import DiagramModal from "@/components/DiagramModal";
 
-
 export default function Home() {
   const [content, setContent] = useState("");
   const [result, setResult] = useState("");
@@ -169,17 +168,16 @@ export default function Home() {
 
       <section
         id="concept"
-        className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden"
-        style={{ height: "200vh" }}
+        className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden my-4"
       >
         <div className="w-full p-6 space-y-4">
           <h2 className="text-2xl font-bold text-gray-900">保存された図一覧</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {savedDiagrams.map((diagram, index) => (
               <div key={index} className="border rounded-lg p-4 shadow-sm">
                 <h3 className="text-lg font-semibold mb-2">{diagram.title}</h3>
                 <div
-                  className="h-64 overflow-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  className="min-h-[200px] max-h-[400px] overflow-auto cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setSelectedDiagram(diagram)}
                 >
                   <MermaidViewer
@@ -196,7 +194,7 @@ export default function Home() {
         <DiagramModal
           diagram={selectedDiagram}
           onClose={() => setSelectedDiagram(null)}
-          />
+        />
       )}
     </div>
   );
