@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const handler = async(req, res) => {
-    if(!['GET','POST'].includes(req.method)){
+    if(!['GET','POST','DELETE'].includes(req.method)){
         return res.status(405).end();
     }
 
@@ -19,6 +19,13 @@ const handler = async(req, res) => {
             const response = await axios.get(DJANGO_API_URL);
             return res.status(200).json(response.data);
             
+        }
+
+        if(req.method === 'DELETE'){
+            const { id } = req.query;
+            const response = await axios.delete(`${DJANGO_API_URL}${id}/`);
+            return res.status(200).json(response.data);
+
         }
         } catch (error) {
             return res.status(500).json({ error: 'Server error' });

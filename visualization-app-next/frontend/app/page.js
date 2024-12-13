@@ -75,6 +75,23 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm("本当にこの図を削除しますか？")) {
+      try {
+        await mermaidClient.deleteDiagram(id);
+        // 削除後にリストを更新
+        const updatedDiagrams = savedDiagrams.filter(
+          (diagram) => diagram.id !== id
+        );
+        setSavedDiagrams(updatedDiagrams);
+        alert("図を削除しました");
+      } catch (error) {
+        console.error("削除に失敗:", error);
+        alert("削除に失敗しました");
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-300 flex flex-col items-center justify-center">
       <header className="flex w-full max-w-5xl justify-between items-center py-4 px-6">
@@ -88,7 +105,7 @@ export default function Home() {
             <span className="absolute bottom-8 left-0 w-full h-2 bg-indigo-200 transform -skew-x-6"></span>
           </span>
         </h1>
-        
+
         {result && (
           <div className="p-4">
             <input
@@ -154,14 +171,23 @@ export default function Home() {
         {isSaving ? "取得中..." : "図を取得する"}
       </button>
 
-      <section
-        className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden my-4"
-      >
+      <section className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden my-4">
         <div className="w-full p-6 space-y-4">
           <h2 className="text-2xl font-bold text-gray-900">保存された図一覧</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {savedDiagrams.map((diagram, index) => (
               <div key={index} className="border rounded-lg p-4 shadow-sm">
+                <div className="flex justify-between items-center mb-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(diagram.id);
+                    }}
+                    className="inline-block bg-slate-400 hover:bg-red-700 text-white py-2 px-6 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    削除
+                  </button>
+                </div>
                 <h3 className="text-lg font-semibold mb-2">{diagram.title}</h3>
                 <div
                   className="min-h-[200px] max-h-[400px] overflow-auto cursor-pointer hover:opacity-80 transition-opacity"
