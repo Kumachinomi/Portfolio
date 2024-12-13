@@ -88,18 +88,7 @@ export default function Home() {
             <span className="absolute bottom-8 left-0 w-full h-2 bg-indigo-200 transform -skew-x-6"></span>
           </span>
         </h1>
-        <button
-          onClick={() => {
-            document
-              .getElementById("concept")
-              .scrollIntoView({ behavior: "smooth" });
-          }}
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2
-           dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-        >
-          下にスクロール
-        </button>
-
+        
         {result && (
           <div className="p-4">
             <input
@@ -166,7 +155,6 @@ export default function Home() {
       </button>
 
       <section
-        id="concept"
         className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden my-4"
       >
         <div className="w-full p-6 space-y-4">
