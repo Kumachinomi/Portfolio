@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import claude from "../lib/claude";
 import mermaidClient from "../lib/MermaidDiagramAPI";
 import MermaidViewer from "@/components/MermaidViewer";
@@ -13,6 +13,8 @@ export default function Home() {
   const [isSaving, setIsSaving] = useState(false);
   const [savedDiagrams, setSavedDiagrams] = useState([]);
   const [selectedDiagram, setSelectedDiagram] = useState(null);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [sortOrder, setSortOrder] = useState("-created_at");
 
   const generate = async () => {
     setIsLoading(true);
@@ -52,6 +54,7 @@ export default function Home() {
     setIsSaving(true);
     try {
       await mermaidClient.saveDiagram(title, result);
+      handleGet();
       alert("保存しました");
       setTitle("");
     } catch (error) {
@@ -64,14 +67,16 @@ export default function Home() {
 
   const handleGet = async () => {
     try {
-      const diagrams = await mermaidClient.getAllDiagrams();
+      const params = {
+        title: searchTitle,
+        ordering: sortOrder,
+      };
+      const diagrams = await mermaidClient.getAllDiagrams(params);
       setSavedDiagrams(diagrams);
       console.log(diagrams);
-      alert("図を取得しました");
     } catch (error) {
       console.error("図の取得に失敗:", error);
       alert("図の取得に失敗しました");
-    } finally {
     }
   };
 
@@ -91,6 +96,10 @@ export default function Home() {
       }
     }
   };
+
+  useEffect(() => {
+    handleGet();
+  }, [searchTitle, sortOrder]);
 
   return (
     <div className="min-h-screen bg-slate-300 flex flex-col items-center justify-center">
@@ -164,12 +173,31 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <button
-        onClick={handleGet}
-        className="inline-block bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isSaving ? "取得中..." : "図を取得する"}
-      </button>
+      <section className="w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden mb-4">
+          <div className="p-4 flex gap-4">
+            <div className="flex-1">
+              <input
+                type="text"
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                placeholder="タイトルで検索..."
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            <div className="flex-1">
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="-created_at">新しい順</option>
+                <option value="created_at">古い順</option>
+                <option value="title">タイトル (あ-)</option>
+                <option value="-title">タイトル (-ん)</option>
+              </select>
+            </div>
+          </div>
+        </section>
 
       <section className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden my-4">
         <div className="w-full p-6 space-y-4">

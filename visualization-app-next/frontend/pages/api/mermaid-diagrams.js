@@ -16,10 +16,15 @@ const handler = async(req, res) => {
         }
 
         if(req.method === 'GET'){
-            const response = await axios.get(DJANGO_API_URL);
-            return res.status(200).json(response.data);
+            const { title, ordering } = req.query;
+            const queryParams = new URLSearchParams();
             
-        }
+            if (title) queryParams.append('title', title);
+            if (ordering) queryParams.append('ordering', ordering);
+            
+            const response = await axios.get(`${DJANGO_API_URL}?${queryParams}`);
+            return res.status(200).json(response.data);
+          }
 
         if(req.method === 'DELETE'){
             const { id } = req.query;

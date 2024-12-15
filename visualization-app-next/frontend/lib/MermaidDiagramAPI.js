@@ -1,26 +1,36 @@
-import axios from 'axios';
+import axios from "axios";
 
 class MermaidDiagramClient {
   async saveDiagram(title, diagram_data) {
     try {
       const requestData = {
         title,
-        diagram_data
+        diagram_data,
       };
-      const response = await axios.post('/api/mermaid-diagrams', requestData);
+      const response = await axios.post("/api/mermaid-diagrams", requestData);
       return response.data;
     } catch (error) {
-      console.error('Save Error:', error.response?.data || error.message);
+      console.error("Save Error:", error.response?.data || error.message);
       throw error;
     }
   }
 
-  async getAllDiagrams() {
+  async getAllDiagrams(params = {}) {
     try {
-      const response = await axios.get('/api/mermaid-diagrams');
+      const queryParams = new URLSearchParams();
+
+      if (params.title) {
+        queryParams.append("title", params.title);
+      }
+
+      if (params.ordering) {
+        queryParams.append("ordering", params.ordering);
+      }
+
+      const response = await axios.get(`/api/mermaid-diagrams?${queryParams}`);
       return response.data;
     } catch (error) {
-      console.error('Get Error:', error.response?.data || error.message);
+      console.error("Get Error:", error.response?.data || error.message);
       throw error;
     }
   }
@@ -28,13 +38,13 @@ class MermaidDiagramClient {
   async deleteDiagram(id) {
     try {
       if (!id) {
-        throw new Error('ID is required for deletion');
+        throw new Error("IDが指定されていないため削除ができません");
       }
-      console.log('Attempting to delete diagram with ID:', id);
+      console.log("図を削除しようとしています:", id);
       const response = await axios.delete(`/api/mermaid-diagrams?id=${id}`);
       return response.data;
     } catch (error) {
-      console.error('Delete Error:', error.response?.data || error.message);
+      console.error("Delete Error:", error.response?.data || error.message);
       throw error;
     }
   }

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'diagrams',
     'rest_framework',
     'corsheaders', # 開発環境用
+    'django_filters',
 ]
 
 MIDDLEWARE = [
