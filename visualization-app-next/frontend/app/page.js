@@ -146,7 +146,7 @@ export default function Home() {
       </header>
       <section
         className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden"
-        style={{ height: "90vh", marginBottom: "20px" }}
+        style={{ height: "60vh", marginBottom: "20px" }}
       >
         <div className="flex flex-col w-1/3 h-full bg-gray-900 overflow-y-auto">
           <div className="flex-1 p-4 text-white">
