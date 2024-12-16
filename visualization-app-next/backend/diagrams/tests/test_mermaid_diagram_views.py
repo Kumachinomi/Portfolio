@@ -22,7 +22,7 @@ class TestMermaidDiagramViewSet:
         url = reverse('mermaiddiagram-list')
         response = api_client.get(url)
         
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == 200
         assert len(response.data) == 1
         assert response.data[0]['title'] == mermaid_diagram.title
         assert response.data[0]['diagram_data'] == mermaid_diagram.diagram_data
@@ -51,7 +51,35 @@ class TestMermaidDiagramViewSet:
         response = api_client.post(url, data, format='json')
 
         assert response.status_code == 400
-        assert 'title' in response.data # タイトルに関するエラー情報があることを確認
+        assert 'title' in response.data 
+
+    def test_update_favorite(self,api_client, mermaid_diagram):
+        """お気に入り状態を更新できることをテスト"""
+        url = reverse('mermaiddiagram-update-favorite',args=[mermaid_diagram.id])
+        response = api_client.patch(url, {'is_favorite': True}, format='json')
+
+        assert response.status_code == 200
+        assert response.data['is_favorite'] is True
+
+    def test_filter_favorite_diagrams(self, api_client):
+        """お気に入りでフィルタリングできることをテスト"""
+        MermaidDiagram.objects.create(
+            title="Favorite Diagram",
+            diagram_data="graph TD;\nA-->B;",
+            is_favorite=True
+        )
+        
+        url = reverse('mermaiddiagram-list')
+        response = api_client.get(f"{url}?is_favorite=true")
+
+        assert response.status_code == 200
+        assert len(response.data) == 1
+        assert response.data[0]['title'] == "Favorite Diagram"
+
+
+
+
+    
 
 
 

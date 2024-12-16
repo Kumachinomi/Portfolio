@@ -5,6 +5,8 @@ from .models import MermaidDiagram
 from .serializers import MermaidDiagramSerializer
 from .filters import MermaidDiagramFilter
 from django_filters.rest_framework import DjangoFilterBackend 
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 class MermaidDiagramViewSet(viewsets.ModelViewSet):
     queryset = MermaidDiagram.objects.all()
@@ -16,6 +18,27 @@ class MermaidDiagramViewSet(viewsets.ModelViewSet):
     ]
     ordering_fields = ['created_at','title']
     ordering = ['-created_at']  
+
+    @action(detail=True, methods=['patch'])
+    def update_favorite(self, request, pk=None):
+        diagram = self.get_object()
+        is_favorite = request.data.get('is_favorite')
+        
+        if is_favorite is None:
+            return Response(
+                {'error': 'お気に入りの状態が指定されていません'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        diagram.is_favorite = is_favorite
+        diagram.save()
+        
+        serializer = self.get_serializer(diagram)
+        return Response(serializer.data)
+
+
+
+
 
 
 
