@@ -15,11 +15,15 @@ const geistMono = localFont({
 export const metadata = {
   title: "可視化できーる",
   description: "システムを可視化するアプリケーション",
+  robots: "noindex,nofollow", 
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="ja">
+      <head>
+        <meta name="robots" content="noindex,nofollow" /> 
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
