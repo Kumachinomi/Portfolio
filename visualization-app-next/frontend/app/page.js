@@ -165,7 +165,7 @@ export default function Home() {
           <div className="flex-1 p-4 text-white">
             <textarea
               value={content}
-              placeholder={"図にしたい文章 または\nプログラミングコード を入力...\n例 ・ピカチュウについて\n　 ・ハンバーガーができるまで\n　 ・ReactとDjangoの連動 \n\n生成されないとき　\n・もう一度生成ボタンを押す　\n・絵文字を追加ボタンを押す　\n・文章を変える"}
+              placeholder={"図にしたい文章または\nプログラミングコードを入力...\n\n生成されないとき　\n生成ボタンをもう一度押す　\n絵文字を追加ボタンを押す　\n文章を変える"}
               onChange={(e) => {
                 setContent(e.target.value);
               }}
