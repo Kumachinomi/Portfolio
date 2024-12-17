@@ -48,6 +48,21 @@ class MermaidDiagramClient {
       throw error;
     }
   }
+
+  async updateFavorite(id, isFavorite) {
+    try {
+      if (!id) {
+        throw new Error("IDが指定されていないため更新ができません");
+      }
+      const response = await axios.patch(`/api/mermaid-diagrams/${id}/update_favorite/`, {
+        is_favorite: isFavorite
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Favorite Update Error:", error.response?.data || error.message);
+      throw error;
+    }
+  }
 }
 
 const mermaidClient = new MermaidDiagramClient();

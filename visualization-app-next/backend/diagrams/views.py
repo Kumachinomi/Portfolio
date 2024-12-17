@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework import filters  
 from django_filters import rest_framework as django_filters  
 from .models import MermaidDiagram
@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 class MermaidDiagramViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete']
     queryset = MermaidDiagram.objects.all()
     serializer_class = MermaidDiagramSerializer
     filterset_class = MermaidDiagramFilter
@@ -16,7 +17,7 @@ class MermaidDiagramViewSet(viewsets.ModelViewSet):
         DjangoFilterBackend,
         filters.OrderingFilter,  
     ]
-    ordering_fields = ['created_at','title']
+    ordering_fields = ['created_at','title', 'is_favorite']
     ordering = ['-created_at']  
 
     @action(detail=True, methods=['patch'])

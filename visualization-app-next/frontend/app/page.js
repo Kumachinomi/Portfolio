@@ -97,6 +97,19 @@ export default function Home() {
     }
   };
 
+  const handleToggleFavorite = async (id, currentFavorite) => {
+    try {
+      const updatedDiagram = await mermaidClient.updateFavorite(id, !currentFavorite);
+      const updatedDiagrams = savedDiagrams.map(diagram => 
+        diagram.id === id ? { ...diagram, is_favorite: !currentFavorite } : diagram
+      );
+      setSavedDiagrams(updatedDiagrams);
+    } catch (error) {
+      console.error("お気に入りの更新に失敗:", error);
+      alert("お気に入りの更新に失敗しました");
+    }
+  };
+
   useEffect(() => {
     handleGet();
   }, [searchTitle, sortOrder]);
@@ -174,30 +187,31 @@ export default function Home() {
         </div>
       </section>
       <section className="w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden mb-4">
-          <div className="p-4 flex gap-4">
-            <div className="flex-1">
-              <input
-                type="text"
-                value={searchTitle}
-                onChange={(e) => setSearchTitle(e.target.value)}
-                placeholder="タイトルで検索..."
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div className="flex-1">
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md"
-              >
-                <option value="-created_at">新しい順</option>
-                <option value="created_at">古い順</option>
-                <option value="title">タイトル (あ-)</option>
-                <option value="-title">タイトル (-ん)</option>
-              </select>
-            </div>
+        <div className="p-4 flex gap-4">
+          <div className="flex-1">
+            <input
+              type="text"
+              value={searchTitle}
+              onChange={(e) => setSearchTitle(e.target.value)}
+              placeholder="タイトルで検索..."
+              className="w-full p-2 border border-gray-300 rounded-md"
+            />
           </div>
-        </section>
+          <div className="flex-1">
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
+            >
+              <option value="-created_at">新しい順</option>
+              <option value="created_at">古い順</option>
+              <option value="title">タイトル (あ-)</option>
+              <option value="-title">タイトル (-ん)</option>
+              <option value="-is_favorite">お気に入り優先</option>
+            </select>
+          </div>
+        </div>
+      </section>
 
       <section className="flex w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden my-4">
         <div className="w-full p-6 space-y-4">
@@ -214,6 +228,19 @@ export default function Home() {
                     className="inline-block bg-slate-400 hover:bg-red-700 text-white py-2 px-6 rounded-md focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     削除
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleFavorite(diagram.id, diagram.is_favorite);
+                    }}
+                    className={`inline-block py-2 px-6 rounded-md focus:outline-none ${
+                      diagram.is_favorite 
+                        ? 'bg-yellow-400 hover:bg-yellow-500 text-white'
+                        : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                    }`}
+                  >
+                    {diagram.is_favorite ? '★ ' : '☆ '}
                   </button>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{diagram.title}</h3>
