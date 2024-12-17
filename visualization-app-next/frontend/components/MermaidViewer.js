@@ -50,7 +50,7 @@ const MermaidViewer = ({ content, diagramId }) => {
     } catch (error) {
       console.error("Mermaid rendering error:", error);
       containerRef.current.innerHTML =
-        '<div class="text-red-500">図の描画に失敗しました。もう一度別の文をお試しください。</div>';
+        '<div class="text-red-500">図の描画に失敗しました。もう一度、生成ボタンを押してください。または、絵文字をつけるボタンをお試しください。複数回試して生成されなければ、別の文をお試しください。</div>';
     }
   };
 
