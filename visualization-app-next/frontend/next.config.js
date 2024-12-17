@@ -13,12 +13,23 @@ const nextConfig = {
     return config;
   },
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://127.0.0.1:8000/api/:path*/',  
-      },
-    ];
+    if (process.env.NODE_ENV === 'development') {
+      // 開発環境用の設定
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'http://127.0.0.1:8000/api/:path*/',
+        },
+      ];
+    } else {
+      // 本番環境用の設定
+      return [
+        {
+          source: '/api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*/`,
+        },
+      ];
+    }
   }
 };
 
