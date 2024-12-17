@@ -14,7 +14,6 @@ const nextConfig = {
   },
   async rewrites() {
     if (process.env.NODE_ENV === 'development') {
-      // 開発環境用の設定
       return [
         {
           source: '/api/:path*',
@@ -22,11 +21,10 @@ const nextConfig = {
         },
       ];
     } else {
-      // 本番環境用の設定
       return [
         {
           source: '/api/:path*',
-          destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*/`,
+          destination: 'https://portfolio-production-ccca.up.railway.app/api/:path*/',
         },
       ];
     }
